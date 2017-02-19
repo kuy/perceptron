@@ -9,7 +9,7 @@ let sum v =
   Vec.fold_left (fun a b -> a +. b) 0. v
 
 let sigf a =
-  if a > 0. then 1 else 0
+  if a > 0. then 1. else 0.
 
 let gand x1 x2 =
   let x = Vec.of_list_dyn two [x1; x2] in
@@ -38,18 +38,28 @@ let gor x1 x2 =
   |> (+.) b
   |> sigf
 
+let xor x1 x2 =
+  let s1 = nand x1 x2 in
+  let s2 = gor x1 x2 in
+  gand s1 s2
+
 let () =
-  assert ((gand 0. 0.) = 0);
-  assert ((gand 1. 0.) = 0);
-  assert ((gand 0. 1.) = 0);
-  assert ((gand 1. 1.) = 1);
+  assert ((gand 0. 0.) = 0.);
+  assert ((gand 1. 0.) = 0.);
+  assert ((gand 0. 1.) = 0.);
+  assert ((gand 1. 1.) = 1.);
 
-  assert ((nand 0. 0.) = 1);
-  assert ((nand 1. 0.) = 1);
-  assert ((nand 0. 1.) = 1);
-  assert ((nand 1. 1.) = 0);
+  assert ((nand 0. 0.) = 1.);
+  assert ((nand 1. 0.) = 1.);
+  assert ((nand 0. 1.) = 1.);
+  assert ((nand 1. 1.) = 0.);
 
-  assert ((gor 0. 0.) = 0);
-  assert ((gor 1. 0.) = 1);
-  assert ((gor 0. 1.) = 1);
-  assert ((gor 1. 1.) = 1)
+  assert ((gor 0. 0.) = 0.);
+  assert ((gor 1. 0.) = 1.);
+  assert ((gor 0. 1.) = 1.);
+  assert ((gor 1. 1.) = 1.);
+
+  assert ((xor 0. 0.) = 0.);
+  assert ((xor 1. 0.) = 1.);
+  assert ((xor 0. 1.) = 1.);
+  assert ((xor 1. 1.) = 0.)
