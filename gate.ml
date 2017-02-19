@@ -11,15 +11,45 @@ let sum v =
 let sigf a =
   if a > 0. then 1 else 0
 
-let and_gate x1 x2 =
+let gand x1 x2 =
+  let x = Vec.of_list_dyn two [x1; x2] in
+  let w = Vec.of_list_dyn two [0.5; 0.5] in
+  let b = -0.7 in
+  Vec.mul x w
+  |> sum
+  |> (+.) b
+  |> sigf
+
+let nand x1 x2 =
+  let x = Vec.of_list_dyn two [x1; x2] in
+  let w = Vec.of_list_dyn two [-0.5; -0.5] in
+  let b = 0.7 in
+  Vec.mul x w
+  |> sum
+  |> (+.) b
+  |> sigf
+
+let gor x1 x2 =
   let x = Vec.of_list_dyn two [x1; x2] in
   let w = Vec.of_list_dyn two [0.5; 0.5] in
   let b = -0.2 in
   Vec.mul x w
-  |> Vec.add (Vec.of_list_dyn two [b; b])
   |> sum
+  |> (+.) b
   |> sigf
 
 let () =
-  let a = and_gate 1. 1. in
-  printf "%d\n" a
+  assert ((gand 0. 0.) = 0);
+  assert ((gand 1. 0.) = 0);
+  assert ((gand 0. 1.) = 0);
+  assert ((gand 1. 1.) = 1);
+
+  assert ((nand 0. 0.) = 1);
+  assert ((nand 1. 0.) = 1);
+  assert ((nand 0. 1.) = 1);
+  assert ((nand 1. 1.) = 0);
+
+  assert ((gor 0. 0.) = 0);
+  assert ((gor 1. 0.) = 1);
+  assert ((gor 0. 1.) = 1);
+  assert ((gor 1. 1.) = 1)
